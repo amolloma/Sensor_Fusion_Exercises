@@ -1,0 +1,11 @@
+{
+    "python.defaultInterpreterPath": "C:\\Users\\amolo\\anaconda3\\python.exe",
+    "python.analysis.extraPaths": [
+        "C:\\Users\\amolo\\anaconda3\\pkgs\\",
+        "C:\\Users\\amolo\\ananconda3\\lib\\site-packages",
+        "./lesson-2-object-detection/examples",
+        "./lesson-2-object-detection/exercises/starter",
+        "./lesson-1-lidar-sensor/examples",
+        "./lesson-1-lidar-sensor/exercises/starter"
+    ]
+}
