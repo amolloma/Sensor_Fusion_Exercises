@@ -42,10 +42,25 @@ def print_pitch_resolution(frame, lidar_name):
 
     print("Exercise C1-5-2")
     # load range image
-        
-    # compute vertical field-of-view from lidar calibration 
+    lidar = [obj for obj in frame.lasers if obj.name == lidar_name][0]
+    if len(lidar.ri_return1.range_image_compressed) > 0: # use first response
+        ri = dataset_pb2.MatrixFloat()
+        ri.ParseFromString(zlib.decompress(lidar.ri_return1.range_image_compressed))
+        ri = np.array(ri.data).reshape(ri.shape.dims)
+   
+    # compute vertical field-of-view from lidar calibration
+    calib_lidar = [data for data in frame.context.laser_calibrations if data.name==lidar_name][0]
+    vfov = calib_lidar.beam_inclination_max - calib_lidar.beam_inclination_min
+    
+    #vfov in degrees
+    vfov_deg = vfov*180/np.pi
 
     # compute pitch resolution and convert it to angular minutes
+    pitch_deg = vfov_deg/ri.shape[0]
+    pitch_ang_min = pitch_deg*60
+    
+    print(pitch_ang_min)
+    
 
 
 # Exercise C1-3-1 : print no. of vehicles
