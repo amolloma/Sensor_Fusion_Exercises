@@ -22,7 +22,7 @@ import math
 import cv2
 import matplotlib.pyplot as plt
 import copy
-import zlib
+import zlib # allows data compression and decompression
 from easydict import EasyDict as edict
 
 # Add current working directory to path
@@ -61,7 +61,7 @@ import l1_exercises
 data_filename = 'training_segment-1005081002024129653_5313_150_5333_150_with_camera_labels.tfrecord' # Sequence 1
 #data_filename = 'training_segment-10072231702153043603_5725_000_5745_000_with_camera_labels.tfrecord' # Sequence 2
 # data_filename = 'training_segment-10963653239323173269_1924_000_1944_000_with_camera_labels.tfrecord'  # Sequence 3
-show_only_frames = [0, 2]  # show only frames in interval for debugging
+show_only_frames = [0, 10]  # show only frames in interval for debugging
 
 # set pause time between frames in ms (0 = stop between frames until key is pressed)
 vis_pause_time = 0  
@@ -92,7 +92,7 @@ while True:
 
         print('------------------------------')
         print('processing frame #' + str(cnt_frame))
-
+        
         # Usage instruction : When working on a specific exercise, 
         # simply uncomment the respective function calls and open 
         # the implementation for more details
@@ -103,19 +103,19 @@ while True:
         lidar_name = dataset_pb2.LaserName.TOP
 
         # Exercise C1-3-1 : print no. of vehicles
-        l1_exercises.print_no_of_vehicles(frame) 
+        #l1_exercises.print_no_of_vehicles(frame) 
 
         # Example C1-3-2 : display camera image
         l1_examples.display_image(frame)
 
         # Example C1-3-3 : print angle of vertical field of view
-        # l1_examples.print_vfov_lidar(frame, lidar_name)
-
+        #l1_examples.print_vfov_lidar(frame, lidar_name)
+  
         # Example C1-5-1 : Load range image
-        # l1_examples.print_range_image_shape(frame, lidar_name)
+        #l1_examples.print_range_image_shape(frame, lidar_name)
 
         # Exercise C1-5-2 : Compute pitch angle resolution
-        # l1_exercises.print_pitch_resolution(frame, lidar_name)
+        #l1_exercises.print_pitch_resolution(frame, lidar_name)
 
         # Example C1-5-3 : Retrieve maximum and minimum distance
         # l1_examples.get_max_min_range(frame, lidar_name)
