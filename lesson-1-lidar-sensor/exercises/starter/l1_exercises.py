@@ -30,12 +30,28 @@ def vis_intensity_channel(frame, lidar_name):
 
     print("Exercise C1-5-5")
     # extract range image from frame
+    lidar = [obj for obj in frame.lasers if obj.name==lidar_name][0]
+    if len(lidar.ri_return1.range_image_compressed) > 0:
+        ri = dataset_pb2.MatrixFloat()
+        ri.ParseFromString(zlib.decompress(lidar.ri_return1.range_image_compressed))
+        ri = np.array(ri.data).reshape(ri.shape.dims)
+    ri[ri<0] = 0.0
 
     # map value range to 8bit
-
+    ri_range = ri[:, :, 1] # [range, intensity, elongation, is_in_no_label_zone]
+    # multiple entire range with half of max value to contrast adjust, else you will only see bright spots
+    # normalize adjusted range and map to grayscale
+    ri_range = np.amax(ri_range)/2 * ri_range * 255 /(np.amax(ri_range)-np.amin(ri_range))
+    img_range = ri_range.astype(np.uint8)
+    
     # focus on +/- 45° around the image center
+    deg45 = int(img_range.shape[1]/8)
+    img_center = int(img_range.shape[1]/2)
+    # select all 64 rows, and center-45 & center+45 for columns
+    img_range = img_range[:, img_center-deg45:img_center+deg45]
 
-
+    cv2.imshow('intensity visulization', img_range) # cv2.imshow(window name, image_name)
+    cv2.waitKey(0)
 
 # Exercise C1-5-2 : Compute pitch angle resolution
 def print_pitch_resolution(frame, lidar_name):
