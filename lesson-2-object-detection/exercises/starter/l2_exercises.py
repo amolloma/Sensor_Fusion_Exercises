@@ -31,7 +31,11 @@ def plot_precision_recall():
     #              by subsequently setting the variable configs.conf_thresh to the values 0.1 ... 0.9 and noted down the results.
     
     # Please create a 2d scatter plot of all precision/recall pairs
-    pass
+    import matplotlib.pyplot as plt
+    P = [0.97, 0.94, 0.93, 0.92, 0.915, 0.91, 0.89, 0.87, 0.82]
+    R = [0.738, 0.738, 0.743, 0.746, 0.746, 0.747, 0.748, 0.752, 0.754]
+    plt.scatter(R, P)   
+    plt.show()
 
 
 # Exercise C2-3-4 : Compute precision and recall
@@ -43,14 +47,20 @@ def compute_precision_recall(det_performance_all, conf_thresh=0.5):
     
     # extract the total number of positives, true positives, false negatives and false positives
     # format of det_performance_all is [ious, center_devs, pos_negs]
+    pos_negs = [i[2] for i in det_performance_all]
+    true_positives = np.sum([i[1] for i in pos_negs])
+    false_positives = np.sum([i[3] for i in pos_negs])
+    false_negatives = np.sum([i[2] for i in pos_negs])
 
-    #print("TP = " + str(true_positives) + ", FP = " + str(false_positives) + ", FN = " + str(false_negatives))
+    print("TP = " + str(true_positives) + ", FP = " + str(false_positives) + ", FN = " + str(false_negatives))
     
-    # compute precision
+    #compute precision
+    precision = true_positives/(true_positives+false_positives)
     
-    # compute recall 
+    #compute recall 
+    recall = true_positives/(true_positives+false_negatives)
 
-    #print("precision = " + str(precision) + ", recall = " + str(recall) + ", conf_thres = " + str(conf_thresh) + "\n")    
+    print("precision = " + str(precision) + ", recall = " + str(recall) + ", conf_thres = " + str(conf_thresh) + "\n")    
     
 
 
@@ -106,13 +116,24 @@ def pcl_to_bev(lidar_pcl, configs, vis=True):
     intensity_map = np.zeros((configs.bev_height+1, configs.bev_width+1))
     intensity_map[np.int_(lidar_pcl_inten[:, 0]), np.int_(lidar_pcl_inten[:, 1])] = lidar_pcl_inten[:, 3]/(np.amax(lidar_pcl_inten[:, 3]-np.amin(lidar_pcl_inten[:, 3])))
     
-    # visualize intensity map
+    # visualize height map
     if vis:
-        img_intensity = intensity_map * 256
-        img_intensity = img_intensity.astype(np.uint8)
+        img_height = height_map * 256
+        img_height = img_height.astype(np.uint8)
         while (1):
-            cv2.imshow('img_intensity', img_intensity)
+            cv2.imshow('img_intensity', img_height)
             if cv2.waitKey(10) & 0xFF == 27:
                 break
         cv2.destroyAllWindows()
+    
+    # visualize intensity map
+    # if vis:
+    #     img_intensity = intensity_map * 256
+    #     img_intensity = img_intensity.astype(np.uint8)
+    #     while (1):
+    #         cv2.imshow('img_intensity', img_intensity)
+    #         if cv2.waitKey(10) & 0xFF == 27:
+    #             break
+    #     cv2.destroyAllWindows()
+    
     
