@@ -15,20 +15,20 @@ class Camera:
     def get_hx(self, x):    
         # calculate nonlinear measurement expectation value h(x)   
         hx = np.zeros((2,1))
-
-        ############
-        # TODO: implement and return h(x)
-        ############
         
+        hx[0, 0] = self.c_i - (self.f_i*x[1, 0]/x[0, 0])
+        hx[1, 0] = self.c_j - (self.f_j*x[2, 0]/x[0, 0])
+
         return hx
     
     def get_H(self, x):
         # calculate Jacobian H at current x from h(x)
         H = np.matrix(np.zeros((2, 6)))
 
-        ############
-        # TODO: implement and return H
-        ############ 
+        H[0, 0] = self.f_i*x[1,0]/x[0,0]**2
+        H[0, 1] = -self.f_i/x[0,0]
+        H[1, 0] = self.f_j*x[2,0]/x[0,0]**2
+        H[1, 2] = -self.f_j/x[0,0]
         
         return H
  

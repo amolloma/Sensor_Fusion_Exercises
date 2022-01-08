@@ -22,18 +22,19 @@ class Filter:
     def predict(self, x, P):
         # predict state and estimation error covariance to next timestep
 
-        ############
-        # TODO: implement prediction step
-        ############
-        
+        x = np.matmul(self.F(), x) #state prediction
+        P = np.matmul(self.F(), np.matmul(P, self.F().transpose()))+self.Q() # Covariance associate with prediction
+              
         return x, P
 
     def update(self, x, P, z, R):
         # update state and covariance with associated measurement
 
-        ############
-        # TODO: implement update step
-        ############
+        y = z - np.matmul(self.H(), x) # Gamma; compares measurement vs prediction state x-
+        S = np.matmul(self.H(), np.matmul(P, self.H().transpose())) + R # gamma covariance
+        K = np.matmul(P, np.matmul(self.H().transpose(), np.linalg.inv(S))) # Kalman Gain
+        x = x + np.matmul(K, y) # state update
+        P = np.matmul((np.identity(np.shape(K)[0])-np.matmul(K, self.H())), P) # covariance update
         
         return x, P     
         
